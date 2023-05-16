@@ -12,15 +12,17 @@ class DashboardController extends GetxController {
   late final String accessToken;
 
   UserModel? user;
-  AnnouncementModel? announcementModel;
+  final Rx<AnnouncementModel?> announcementModel = (null as AnnouncementModel?).obs;
 
 
   @override
   void onInit() async {
     final loggedIn = LocalStore.readValue(key: 'logged_inf');
-    if (loggedIn) {
+    if (loggedIn ?? false) {
       user = UserModel.fromJson(LocalStore.readValue(key: 'user'));
     }
+    await fetchAnnouncement();
+    debugPrint('here reached');
     super.onInit();
   }
 
@@ -30,7 +32,8 @@ class DashboardController extends GetxController {
     if (connectionAvailable) {
       Response? response = await AnnouncementRepository.getAnnouncements();
       if (response != null && response.statusCode == 200) {
-        announcementModel = AnnouncementModel.fromJson(response.body);
+        announcementModel.value = AnnouncementModel.fromJson(response.body);
+        debugPrint(announcementModel.value!.announcements![0].name);
       } else {
         AppUtils.showSnackBar(
           context: Get.context!,

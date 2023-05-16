@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../data/model/announcement_model.dart';
 import '../../constants/colors.dart';
+import '../components/announcement_row.dart';
 import '../components/grey_container.dart';
 
-class AnnouncementWidget extends StatefulWidget {
-  const AnnouncementWidget({Key? key}) : super(key: key);
+class AnnouncementWidget extends StatelessWidget {
+  final AnnouncementModel? announcementModel;
 
-  @override
-  State<AnnouncementWidget> createState() => _AnnouncementWidgetState();
-}
+  const AnnouncementWidget({super.key, this.announcementModel});
 
-class _AnnouncementWidgetState extends State<AnnouncementWidget> {
   @override
   Widget build(BuildContext context) {
+    debugPrint('announcement value: ${announcementModel?.announcements}');
     return GreyContainer(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -25,41 +25,22 @@ class _AnnouncementWidgetState extends State<AnnouncementWidget> {
             ),
           ),
           const Divider(),
-          Row(
-            children: const [
-              Expanded(
-                child: Text(
-                  'Title',
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'Start Date',
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'End Date',
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'Description',
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-            ],
+          const AnnouncementRow(
+            name: "Name",
+            startDate: 'Start Date',
+            endDate: 'End Date',
+            description: 'Description',
+            fontWeight: FontWeight.bold,
+          ),
+          const Divider(),
+          ...List.generate(
+            announcementModel?.announcements?.length ?? 0,
+            (index) => AnnouncementRow(
+              name: announcementModel?.announcements?[index].name,
+              startDate: announcementModel?.announcements?[index].startDate,
+              endDate: announcementModel?.announcements?[index].endDate,
+              description: announcementModel?.announcements?[index].description,
+            ),
           )
         ],
       ),

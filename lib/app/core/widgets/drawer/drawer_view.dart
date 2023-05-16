@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:storage_key_app/app/constants/colors.dart';
 
 import '../../../constants/app_constants.dart';
+import '../../../functions/functions.dart';
 import 'drawer_controller.dart';
 import 'drawer_item.dart';
 
@@ -48,6 +49,14 @@ class DrawerMenuView extends StatelessWidget {
                 prefixIcon: AppConstants.timerIcon,
                 title: 'Summary',
                 value: 3,
+              ),
+              const Divider(),
+              MaterialButton(
+                onPressed: () => GlobalFunctions.logout(context),
+                child: const ListTile(
+                  leading: Icon(Icons.logout, size: 36,),
+                  title: Text('Logout', style: TextStyle(fontSize: 18),),
+                ),
               ),
               const Divider(),
             ],

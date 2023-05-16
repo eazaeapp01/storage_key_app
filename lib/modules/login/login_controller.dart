@@ -60,17 +60,18 @@ class LoginController extends GetxController {
         if (response.statusCode == 200 && response.body['status']) {
           final user = UserModel.fromJson(response.body);
 
-          // write user to local storage
-          LocalStore.writeValue(key: 'user', value: user.toJson());
-
-          // now write access token to local storage
-          LocalStore.writeValue(key: 'access_token', value: user.token);
-
           // now also make it logged in
           if (rememberMe.value == true) {
+            // write user to local storage
+            LocalStore.writeValue(key: 'user', value: user.toJson());
+
+            // now write access token to local storage
+            LocalStore.writeValue(key: 'access_token', value: user.token);
+
             LocalStore.writeValue(key: 'logged_in', value: true);
           }
 
+          // Now lets navigate to the 'dashboard' screen
           Get.offAllNamed(Routes.dashboard);
         } else {
           AppUtils.showSnackBar(

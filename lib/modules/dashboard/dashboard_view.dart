@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../app/constants/colors.dart';
 import '../../app/core/components/custom_button.dart';
@@ -8,23 +9,10 @@ import '../../app/core/widgets/drawer/drawer_view.dart';
 import '../../app/core/widgets/leave_status.dart';
 import '../../app/core/widgets/punch_status.dart';
 import '../../app/core/widgets/time_log.dart';
+import 'dashboard_controller.dart';
 
-
-class DashboardView extends StatefulWidget {
-  const DashboardView({Key? key}) : super(key: key);
-
-  @override
-  State<DashboardView> createState() => _DashboardViewState();
-}
-
-class _DashboardViewState extends State<DashboardView> {
-
-  Future<void> getAnnouncement() async {
-    // final announcement = await announcementRepository.getAnnouncement();
-    // setState(() {
-    //   _announcement = announcement;
-    // });
-  }
+class DashboardView extends GetView<DashboardController> {
+  const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +24,7 @@ class _DashboardViewState extends State<DashboardView> {
           child: Image.asset('assets/images/mini_logo.png'),
         ),
       ),
-      endDrawer: DrawerMenuView(),
+      // endDrawer: DrawerMenuView(),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -146,9 +134,12 @@ class _DashboardViewState extends State<DashboardView> {
               const SizedBox(height: 10),
               const TimeLogWidget(),
               const SizedBox(height: 10),
-              const AnnouncementWidget(),
+              Obx(() {
+                return AnnouncementWidget(
+                  announcementModel: controller.announcementModel.value,
+                );
+              }),
               const SizedBox(height: 10),
-
             ],
           ),
         ),

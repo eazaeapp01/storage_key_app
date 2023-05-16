@@ -3,6 +3,8 @@ class AnnouncementModel {
 
   AnnouncementModel({this.announcements});
 
+  AnnouncementModel.empty();
+
   AnnouncementModel.fromJson(List json) {
     announcements = <Announcements>[];
     for (var v in json) {
