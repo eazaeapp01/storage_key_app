@@ -4,6 +4,7 @@ import '../../app/constants/colors.dart';
 import '../../app/core/components/custom_button.dart';
 import '../../app/core/components/grey_container.dart';
 import '../../app/core/widgets/announcement_widget.dart';
+import '../../app/core/widgets/drawer/drawer_view.dart';
 import '../../app/core/widgets/leave_status.dart';
 import '../../app/core/widgets/punch_status.dart';
 import '../../app/core/widgets/time_log.dart';
@@ -35,12 +36,7 @@ class _DashboardViewState extends State<DashboardView> {
           child: Image.asset('assets/images/mini_logo.png'),
         ),
       ),
-      endDrawer: SafeArea(
-        child: Container(
-          color: Colors.white,
-          width: 300,
-        ),
-      ),
+      endDrawer: DrawerMenuView(),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(

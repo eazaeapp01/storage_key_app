@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:storage_key_app/app/constants/app_constants.dart';
 
 import '../../app/routes/routes.dart';
 import '../../app/utils/snackbar.dart';
-import '../../data/repository/login_repository.dart';
+import '../../data/model/user_model.dart';
+import '../../data/repository/remote_repository/login_repository.dart';
 import '../../app/utils/internet_checker.dart';
-import '../../data/repository/storage_repository.dart';
+import '../../data/repository/local_repository/storage_repository.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -29,9 +29,9 @@ class LoginController extends GetxController {
       rememberMe.value = true;
     } else {
       rememberMe.value = false;
+      emailController.text = 'salmanrazabwn@gmail.com';
     }
 
-    emailController.text = 'salmanrazabwn@gmail.com';
     super.onInit();
   }
 
@@ -47,18 +47,30 @@ class LoginController extends GetxController {
       LocalStore.removeValue(key: AppConstants.rememberMe);
     }
 
-    loading.value = true;
     FocusManager.instance.primaryFocus!.unfocus();
     if (formKey.currentState!.validate()) {
       bool connectionAvailable = await InternetChecker.getConnectionStatus();
       if (connectionAvailable) {
+        loading.value = true;
         final Response response = await LoginRepository().login(
           userName: emailController.text,
           password: passwordController.text,
         );
         loading.value = false;
         if (response.statusCode == 200 && response.body['status']) {
-          debugPrint('logged in');
+          final user = UserModel.fromJson(response.body);
+
+          // write user to local storage
+          LocalStore.writeValue(key: 'user', value: user.toJson());
+
+          // now write access token to local storage
+          LocalStore.writeValue(key: 'access_token', value: user.token);
+
+          // now also make it logged in
+          if (rememberMe.value == true) {
+            LocalStore.writeValue(key: 'logged_in', value: true);
+          }
+
           Get.offAllNamed(Routes.dashboard);
         } else {
           AppUtils.showSnackBar(
@@ -67,6 +79,12 @@ class LoginController extends GetxController {
             color: Colors.red[900],
           );
         }
+      } else {
+        AppUtils.showSnackBar(
+            context: Get.context!,
+            message: 'Error ::: No, internet connection available!',
+            color: Colors.red[900],
+        );
       }
     }
   }

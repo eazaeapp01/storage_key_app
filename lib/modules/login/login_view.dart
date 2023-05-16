@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../app/constants/colors.dart';
 import '../../app/core/components/custom_button.dart';
 import '../../app/core/components/custom_text_form_field.dart';
+import '../../app/routes/routes.dart';
 import 'login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -133,15 +134,33 @@ class LoginView extends GetView<LoginController> {
                       disableColor: AppColors.primaryColor,
                       child: controller.loading.value
                           ? const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(color: Colors.white),
-                          )
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(
+                                  color: Colors.white),
+                            )
                           : const Text(
                               'Login',
-                              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
                     );
                   }),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    onPressed: () => Get.toNamed(Routes.register),
+                    height: 50,
+                    width: context.isTablet ? context.height * .4 : null,
+                    disableColor: AppColors.primaryColor,
+                    child: const Text(
+                      'Register',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
                   const SizedBox(height: 80),
                 ],
               ),

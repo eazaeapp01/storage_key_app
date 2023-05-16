@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'app/routes/router.dart';
 import 'app/routes/routes.dart';
-import 'data/repository/storage_repository.dart';
+import 'data/repository/local_repository/storage_repository.dart';
 
 void main() async {
   await GetStorage.init();
@@ -14,12 +14,18 @@ void main() async {
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   ).then(
-    (value) => runApp(const StorageKeyApp()),
+    (value) {
+      bool? loggedIn = LocalStore.readValue(key: 'logged_in');
+      debugPrint('logged in: $loggedIn');
+      runApp(StorageKeyApp(loggedIn: loggedIn));
+    },
   );
 }
 
 class StorageKeyApp extends StatelessWidget {
-  const StorageKeyApp({super.key});
+  final bool? loggedIn;
+
+  const StorageKeyApp({super.key, required this.loggedIn});
 
   // This widget is the root of your application.
   @override
@@ -30,7 +36,7 @@ class StorageKeyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: Routes.login,
+      initialRoute: loggedIn == true ? Routes.dashboard : Routes.login,
       getPages: AppRoutes.routes,
     );
   }

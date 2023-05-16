@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../../app/constants/app_constants.dart';
+import '../../../app/constants/app_constants.dart';
 
 class LoginRepository extends GetConnect implements GetxService {
   Future login({required String userName, required String password}) async {
